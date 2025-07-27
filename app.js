@@ -35,15 +35,25 @@ let server = http.createServer((req,res)=>{
             console.log(chunk);
             data.push(chunk);
         });
-        req.on('end',()=>{
+        /** 
+         * Based on Event Driven Approach that Node.js Working using it 
+         * req.on('end') is a event and has a listener that is the callback function that will be excuted
+         * after the whole code excuted ( after sending the response ) ,
+         * so we made that event as a return to excute it totally
+         * 
+         * and also made the write file function asynchronous not sync , to make it non-blocking function
+         * and used the error callback to assure the response returned based on the function is already excuted 
+         */
+        return req.on('end',()=>{
             const parsedData = Buffer.concat(data).toString(); // BC ITS TEXT 
             const message = parsedData.split('=')[1];
             console.log(message);
-            fs.writeFileSync('message.txt',message);
+            fs.writeFile('message.txt',message , err => {
+                res.statusCode = 302;
+                res.setHeader('Location' ,'/');
+                return res.end();
+            });
         })
-        res.statusCode = 302;
-        res.setHeader('Location' ,'/');
-        return res.end();
     }
 
     res.setHeader('Content-Type','text/html');
