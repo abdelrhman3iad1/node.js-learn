@@ -31,9 +31,11 @@ server.listen(8000);
  * all of these callbacks are excuted as a queue contains each operation ,
  *  the priorty of each operation makes the queue of callbacks excutes until its empty
  * 
- *  process.nextTick() -> Promises -> timers -> process.nextTick() -> Promises ->
- *  Poll and Pending Callbacks -> process.nextTick() -> Promises -> check
- *  -> process.nextTick() -> Promises
+ *  -> process.nextTick() -> Promises -> timers 
+ *  -> process.nextTick() -> Promises -> Poll and Pending Callbacks
+ *  -> process.nextTick() -> Promises -> check
+ *  -> process.nextTick() -> Promises -> close
+ *  -> process.nextTick() -> Promises 
  * 
  * 
  * until refs == 0 so process.exit() done
